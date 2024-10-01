@@ -67,8 +67,8 @@
             let scale = map(heartIndex, 0, numHearts, maxScale, 0); // 하트의 크기를 설정
             let colorValue = map(heartIndex, 0, numHearts, 0.3, 1);
             
-            // 큰 하트는 빨간색, 작은 하트는 연한 핑크색으로 설정
-            let strokeColor = lerpColor(color(255, 0, 0), color(255, 182, 193), colorValue); // 빨간색에서 연한 핑크색으로 그라데이션
+            // LED 조명 느낌의 빨간색으로 설정
+            let strokeColor = color(255, 0, 0); // LED 빨간색
 
             // 하트 윤곽선 그리기
             stroke(strokeColor);
@@ -135,7 +135,7 @@
                 // 작은 하트를 그리기
                 noStroke();
                 fill(255, 0, 0, smallHeart.alpha); // 반투명 빨간색 채우기
-                draw3DHeart(smallHeart.x, smallHeart.y, smallHeart.scale); // 입체감 있는 하트 그리기
+                drawHeartShape(smallHeart.x, smallHeart.y, smallHeart.scale); // 하트 모양 그리기
 
                 // 작은 하트가 화면을 벗어나면 배열에서 제거
                 if (smallHeart.y < -50 || smallHeart.alpha <= 0) {
@@ -149,8 +149,8 @@
             }
         }
 
-        // 입체감 있는 하트를 그리는 함수
-        function draw3DHeart(x, y, scale) {
+        // 하트를 그리는 함수
+        function drawHeartShape(x, y, scale) {
             beginShape();
             for (let theta = 0; theta < TWO_PI; theta += 0.1) {
                 let heartX = scale * 16 * pow(sin(theta), 3);
