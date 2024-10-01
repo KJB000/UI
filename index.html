@@ -6,7 +6,6 @@
     <title>Heart Animation</title>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/p5.js/1.4.0/p5.js"></script>
     <script>
-        // 설정 변수들
         let numHearts = 10; // 총 그려질 하트의 개수
         let maxScale = 27; // 최대 스케일
         let drawProgress = 0; // 현재까지 그린 하트의 진행 상태 (0 ~ 1 사이의 값)
@@ -41,7 +40,7 @@
                 drawHeart(currentHeart, drawProgress, false); // 현재 하트를 그리기
 
                 // 진행 상태를 증가시킴
-                drawProgress += 0.02; // 그려지는 속도를 조절하고 싶다면 이 값을 변경하세요
+                drawProgress += 0.03; // 그려지는 속도를 조절 (이 값을 변경하여 속도를 조절할 수 있습니다)
 
                 // 현재 하트가 완전히 그려졌으면 다음 하트로 넘어감
                 if (drawProgress >= 1) {
@@ -65,15 +64,20 @@
         // 특정 진행 상태로 하트를 그리는 함수
         function drawHeart(heartIndex, progress, fillColor) {
             let scale = map(heartIndex, 0, numHearts, maxScale, 0); // 하트의 크기를 설정
-            let colorValue = map(heartIndex, 0, numHearts, 0.3, 1);
-            
-            // LED 조명 느낌의 빨간색으로 설정
-            let strokeColor = color(255, 0, 0); // LED 빨간색
+            let colorValue = map(heartIndex, 0, numHearts, 0, 1); // 0(검은색)에서 1(흰색)으로 그라데이션
+
+            // 윤곽선 색상과 채우기 색상 정의
+            let strokeColor = lerpColor(color(0), color(255), colorValue); // 윤곽선 색상 (검은색에서 흰색으로 그라데이션)
+            let fillColorValue = lerpColor(color(0), color(255), colorValue); // 채우기 색상 (검은색에서 흰색으로 그라데이션)
 
             // 하트 윤곽선 그리기
             stroke(strokeColor);
             strokeWeight(10); // 윤곽선 두께 설정 (더 두껍게)
             noFill(); // 채우기 색상을 없음으로 설정
+
+            // 그림자 효과 추가
+            drawingContext.shadowBlur = 20; // 그림자 흐림 효과
+            drawingContext.shadowColor = strokeColor; // 그림자 색상
 
             // 하트를 그릴 때 첫 번째 점을 정의
             beginShape();
@@ -90,7 +94,7 @@
 
             // 하트를 완전히 그린 후 색을 채우기
             if (fillColor) {
-                fill(strokeColor); // 하트 채우기 색상 설정
+                fill(fillColorValue); // 하트 채우기 색상 설정
                 beginShape();
                 for (let theta = 0; theta < TWO_PI; theta += 0.01) {
                     let x = scale * 16 * pow(sin(theta), 3);
@@ -99,6 +103,9 @@
                 }
                 endShape(CLOSE);
             }
+
+            // 그림자 효과 리셋
+            drawingContext.shadowBlur = 0; 
         }
 
         // 작은 하트를 생성하는 함수
@@ -134,8 +141,8 @@
 
                 // 작은 하트를 그리기
                 noStroke();
-                fill(255, 0, 0, smallHeart.alpha); // 반투명 빨간색 채우기
-                drawHeartShape(smallHeart.x, smallHeart.y, smallHeart.scale); // 하트 모양 그리기
+                fill(255, 255, 255, smallHeart.alpha); // 반투명 핑크색 채우기
+                drawSmallHeart(smallHeart.x, smallHeart.y, smallHeart.scale); // 작은 하트 그리기
 
                 // 작은 하트가 화면을 벗어나면 배열에서 제거
                 if (smallHeart.y < -50 || smallHeart.alpha <= 0) {
@@ -149,8 +156,8 @@
             }
         }
 
-        // 하트를 그리는 함수
-        function drawHeartShape(x, y, scale) {
+        // 작은 하트를 그리는 함수
+        function drawSmallHeart(x, y, scale) {
             beginShape();
             for (let theta = 0; theta < TWO_PI; theta += 0.1) {
                 let heartX = scale * 16 * pow(sin(theta), 3);
