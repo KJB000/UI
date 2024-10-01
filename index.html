@@ -13,12 +13,10 @@
         let currentHeart = 0; // 현재 그리는 하트의 인덱스
         let popAnimation = false; // 하트가 터지는 애니메이션 활성화 여부
         let smallHearts = []; // 작은 하트들 배열
-        let canvasSize; // 캔버스 크기 설정
         let allHeartsDrawn = false; // 모든 하트가 그려졌는지 확인하는 변수
 
         function setup() {
-            canvasSize = min(windowWidth, windowHeight); // 화면 크기에 맞춰 캔버스 크기 설정
-            createCanvas(canvasSize, canvasSize);
+            createCanvas(windowWidth, windowHeight); // 브라우저 크기에 맞춰 캔버스 크기 설정
             noFill();
             frameRate(30); // 초당 30 프레임 설정
         }
@@ -181,6 +179,11 @@
                 vertex(x + heartX, y + heartY);
             }
             endShape(CLOSE);
+        }
+
+        // 창 크기가 변경될 때 캔버스 크기 조정
+        function windowResized() {
+            resizeCanvas(windowWidth, windowHeight);
         }
     </script>
 </head>
