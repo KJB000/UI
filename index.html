@@ -8,7 +8,7 @@
     <script>
         // 설정 변수들
         let numHearts = 10; // 총 그려질 하트의 개수
-        let maxScale = 26; // 최대 스케일
+        let maxScale = 27; // 최대 스케일
         let drawProgress = 0; // 현재까지 그린 하트의 진행 상태 (0 ~ 1 사이의 값)
         let currentHeart = 0; // 현재 그리는 하트의 인덱스
         let popAnimation = false; // 하트가 터지는 애니메이션 활성화 여부
@@ -18,7 +18,7 @@
         function setup() {
             createCanvas(windowWidth, windowHeight); // 브라우저 크기에 맞춰 캔버스 크기 설정
             noFill();
-            frameRate(30); // 초당 30 프레임 설정
+            frameRate(60); // 초당 30 프레임 설정
         }
 
         function draw() {
@@ -72,22 +72,22 @@
 
             // 후광 효과를 위해 큰 하트 그리기 (반투명)
             strokeWeight(0); // 윤곽선 없애기
-            fill(strokeColor.levels[0], strokeColor.levels[1], strokeColor.levels[2], 100); // 반투명하게 설정
+            fill(strokeColor.levels[0], strokeColor.levels[1], strokeColor.levels[2], 150); // 반투명하게 설정
             beginShape();
             for (let theta = 0; theta < TWO_PI; theta += 0.1) {
-                let x = (scale + 5) * 16 * pow(sin(theta), 3);
-                let y = -(scale + 5) * (13 * cos(theta) - 5 * cos(2 * theta) - 2 * cos(3 * theta) - cos(4 * theta));
+                let x = (scale + 8) * 16 * pow(sin(theta), 3);
+                let y = -(scale + 8) * (13 * cos(theta) - 5 * cos(2 * theta) - 2 * cos(3 * theta) - cos(4 * theta));
                 vertex(x, y);
             }
             endShape(CLOSE);
 
             // 하트 윤곽선 그리기
             stroke(strokeColor);
-            strokeWeight(6); // 윤곽선 두께 설정
+            strokeWeight(10); // 윤곽선 두께 설정 (더 두껍게)
             noFill(); // 채우기 색상을 없음으로 설정
 
             // 윤곽선에 야광 효과 추가
-            drawingContext.shadowBlur = 20; // 그림자 흐림 효과
+            drawingContext.shadowBlur = 30; // 그림자 흐림 효과
             drawingContext.shadowColor = strokeColor; // 그림자 색상
 
             beginShape();
@@ -181,7 +181,7 @@
             endShape(CLOSE);
         }
 
-        // 창 크기가 변경될 때 캔버스 크기 조정
+        // 크기 변경 시 캔버스 크기 조정
         function windowResized() {
             resizeCanvas(windowWidth, windowHeight);
         }
