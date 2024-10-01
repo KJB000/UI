@@ -18,7 +18,7 @@
         function setup() {
             createCanvas(windowWidth, windowHeight); // 브라우저 크기에 맞춰 캔버스 크기 설정
             noFill();
-            frameRate(60); // 초당 30 프레임 설정
+            frameRate(30); // 초당 30 프레임 설정
         }
 
         function draw() {
@@ -70,29 +70,13 @@
             // 큰 하트는 빨간색, 작은 하트는 연한 핑크색으로 설정
             let strokeColor = lerpColor(color(255, 0, 0), color(255, 182, 193), colorValue); // 빨간색에서 연한 핑크색으로 그라데이션
 
-            // 후광 효과를 위해 큰 하트 그리기 (반투명)
-            strokeWeight(0); // 윤곽선 없애기
-            fill(strokeColor.levels[0], strokeColor.levels[1], strokeColor.levels[2], 150); // 반투명하게 설정
-            beginShape();
-            for (let theta = 0; theta < TWO_PI; theta += 0.1) {
-                let x = (scale + 8) * 16 * pow(sin(theta), 3);
-                let y = -(scale + 8) * (13 * cos(theta) - 5 * cos(2 * theta) - 2 * cos(3 * theta) - cos(4 * theta));
-                vertex(x, y);
-            }
-            endShape(CLOSE);
-
             // 하트 윤곽선 그리기
             stroke(strokeColor);
             strokeWeight(10); // 윤곽선 두께 설정 (더 두껍게)
             noFill(); // 채우기 색상을 없음으로 설정
 
-            // 윤곽선에 야광 효과 추가
-            drawingContext.shadowBlur = 30; // 그림자 흐림 효과
-            drawingContext.shadowColor = strokeColor; // 그림자 색상
-
-            beginShape();
-            
             // 하트를 그릴 때 첫 번째 점을 정의
+            beginShape();
             let startTheta = 0;
             let endTheta = TWO_PI * progress;
 
@@ -115,9 +99,6 @@
                 }
                 endShape(CLOSE);
             }
-
-            // 그림자 효과 리셋
-            drawingContext.shadowBlur = 0; 
         }
 
         // 작은 하트를 생성하는 함수
@@ -154,8 +135,6 @@
                 // 작은 하트를 그리기
                 noStroke();
                 fill(255, 0, 0, smallHeart.alpha); // 반투명 빨간색 채우기
-                drawingContext.shadowBlur = 20; // 그림자 흐림 효과
-                drawingContext.shadowColor = color(255, 0, 0); // 하트의 야광 효과
                 draw3DHeart(smallHeart.x, smallHeart.y, smallHeart.scale); // 입체감 있는 하트 그리기
 
                 // 작은 하트가 화면을 벗어나면 배열에서 제거
